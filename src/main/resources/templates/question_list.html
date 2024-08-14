@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        .table td, .table th {
+            padding: 0.5rem;
+            vertical-align: middle;
+            word-wrap: break-word;
+            white-space: normal; /* nowrap에서 normal로 변경하여 줄바꿈 허용 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hoverable:hover {
+            cursor: pointer;
+        }
+
+        .word_title_main {
+            font-size: 0.9rem;
+        }
+
+        .text-sm {
+            font-size: 0.8rem;
+        }
+
+        .pagination {
+            margin: 0; /* Ensure pagination doesn't add extra margin */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 1rem 0;
+        }
+
+        .pagination .page-item {
+            margin: 0 0.25rem;
+            flex: 0 0 auto;
+        }
+
+        .pagination .page-item .page-link {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .table-responsive {
+            overflow-x: auto; /* 좌우 스크롤을 허용하기 */
+            -webkit-overflow-scrolling: touch; /* 모바일 장치에서 더 나은 스크롤 경험을 위해 추가 */
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .border-collapse {
+            border-collapse: collapse;
+        }
+
+        .w-1/2 {
+            width: 50%;
+        }
+
+        .text-start {
+            text-align: left;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .justify-content-center {
+            justify-content: center;
+        }
+
+        @media (max-width: 576px) {
+            .table td, .table th {
+                font-size: 0.8rem; /* 작은 화면에서 폰트 크기 줄이기 */
+            }
+
+            .word_title_main {
+                white-space: normal; /* 작은 화면에서 줄바꿈 허용 */
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+            }
+
+            .pagination .page-item {
+                margin: 0.1rem;
+            }
+
+            .pagination .page-item .page-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container my-3">
+    <div class="row my-3">
+        <div class="col-6">
+            <a th:href="@{/board/create}" class="btn bg-black text-white px-4 py-2">글 쓸래!</a>
+        </div>
+
+        <div class="col-6">
+            <div class="input-group">
+                <input type="text" id="search_kw" class="form-control" th:value="${kw}">
+                <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered w-full">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th>번호</th>
+                <th>게시글</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="board, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td class="text-start">
+                    <div class="hoverable" th:onclick="|location.href='@{/board/detail/{id}(id=${board.id})}'|">
+                        <div>
+                            <strong><p class="word_title_main" th:utext="${board.subject}"></p></strong>
+                        </div>
+                        <div class="d-flex justify-content-between flex-wrap">
+                            <div style="line-height: 1.2; padding: 8px 0;">
+                                <span class="word" th:text="${board.content}"></span>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap" style="padding: 8px 0;">
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/board/vote/${board.id}|}">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span th:text="${#lists.size(board.voter)}"></span>
+                                    </a>
+                                </div>
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/board/vote/${board.id}|}">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span th:text="|${#lists.size(board.answerList)}|"></span>
+                                    </a>
+                                </div>
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/board/vote/${board.id}|}">
+                                        <span th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${!paging.hasPrevious()} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number - 1}">
+                    <span><i class="fa-solid fa-angle-left"></i></span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
+                th:if="${page >= paging.number - 5 and page <= paging.number + 5}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page + 1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext()} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number + 1}">
+                    <span><i class="fa-solid fa-angle-right"></i></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+    <form th:action="@{/board/list}" method="get" id="searchForm">
+        <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    </form>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    document.addEventListener('DOMContentLoaded', function () {
+        const page_elements = document.querySelectorAll(".page-link");
+        page_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const page = this.getAttribute('data-page');
+                document.getElementById('page').value = page;
+                document.getElementById('searchForm').submit();
+            });
+        });
+
+        const btn_search = document.getElementById("btn_search");
+        btn_search.addEventListener('click', function () {
+            document.getElementById('kw').value = document.getElementById('search_kw').value;
+            document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+            document.getElementById('searchForm').submit();
+        });
+
+        const search_kw = document.getElementById("search_kw");
+        search_kw.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();  // 엔터키로 인한 기본 폼 제출 방지
+                document.getElementById('kw').value = document.getElementById('search_kw').value;
+                document.getElementById('page').value = 0;  // 검색 시 0페이지부터 조회한다.
+                document.getElementById('searchForm').submit();
+            }
+        });
+    });
+</script>
+</body>
+</html>

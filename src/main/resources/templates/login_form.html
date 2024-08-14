@@ -1,0 +1,96 @@
+<!--<html layout:decorate="~{layout}">-->
+<!--<div layout:fragment="content" class="container my-3">-->
+<!--    <form th:action="@{/user/login}" method="post">-->
+<!--        <div th:if="${param.error}">-->
+<!--            <div class="alert alert-danger">-->
+<!--                사용자ID 또는 비밀번호를 확인해 주세요.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="username" class="form-label">사용자ID</label>-->
+<!--            <input type="text" name="username" id="username" class="form-control">-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="password" class="form-label">비밀번호</label>-->
+<!--            <input type="password" name="password" id="password" class="form-control">-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">로그인</button>-->
+<!--    </form>-->
+<!--    <br/>-->
+<!--    <form th:action="@{/user/signup}">-->
+<!--        <button type="submit" class="btn btn-primary">회원가입</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</html>-->
+<!--폰트어썸 아이콘-->
+<!--폰트어썸 아이콘-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+<!--데이지 UI-->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+<!--테일윈드-->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<h1 th:href="@{https://github.com/PNU-2024-07-TEAM2}" style="display: flex; justify-content: center;" target="_blank">
+    <img th:src="@{/images/ourapp.png}" alt="My advertisement" width="65%">
+</h1>
+<main class="flex-grow flex items-center justify-center">
+    <script>
+        function submitLoginForm(form) {
+            form.username.value = form.username.value.trim();
+
+            // todo: alert -> toast 변경
+            if (form.username.value.length == 0) {
+                alert("아이디를 입력해주세요.");
+                form.username.focus();
+                return;
+            }
+
+            if (form.password.value.length == 0) {
+                alert("비밀번호를 입력해주세요.");
+                form.password.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+
+<!--    <a th:href="@{https://github.com/PNU-2024-07-TEAM2}" style="display: flex; justify-content: center;" target="_blank">-->
+<!--        <img th:src="@{/images/my_ad.gif}" alt="My advertisement" width="35%">-->
+<!--    </a>-->
+
+
+    <form th:action="@{/user/login}" method="post" class="w-full max-w-md grid grid-cols-1 gap-4"
+          onsubmit="submitLoginForm(this); return false;">
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                사용자ID 또는 비밀번호를 확인해 주세요.
+            </div>
+        </div>
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">아아디</span>
+            </div>
+            <input name="username" type="text" placeholder="아이디" class="input input-bordered w-full"/>
+        </label>
+
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">비밀번호</span>
+            </div>
+            <input name="password" type="password" placeholder="비밀번호" class="input input-bordered w-full"/>
+        </label>
+
+        <div>
+            <button type="submit" class="btn bg-black text-white w-full">로그인</button>
+        </div>
+        <div>
+            <a href="/user/signup" class="btn btn-link text-black">회원가입</a>
+<!--            <a href="#" class="btn btn-link text-black">아이디/비밀번호 찾기</a>-->
+        </div>
+
+    </form>
+</main>
+</div>

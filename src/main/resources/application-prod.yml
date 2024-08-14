@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://anytime-db.internal:5432/anytime_prod
+    username: postgres
+    password: ${custom.secret.spring.datasource.password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+logging:
+  level:
+    org.example.project1: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO

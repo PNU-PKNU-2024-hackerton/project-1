@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <!-- sbb CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+    <title>애니타임</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 추가 스타일 -->
+    <style>
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000; /* 우선순위를 높여 다른 요소 위에 표시되도록 함 */;
+        }
+
+        .fixed-bottom2 {
+            bottom: 0;
+            width: 100%;
+            z-index: 999; /* 우선순위를 높여 다른 요소 위에 표시되도록 함 */
+        }
+
+        .hoverable {
+            transition: background-color 0.3s;
+        }
+
+        .hoverable:hover {
+            background-color: #f3f2f2;
+        }
+
+        .word {
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 생략 부호(...) 표시 */
+            display: -webkit-box; /* 박스 모델 설정 */
+            -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+            -webkit-line-clamp: 2; /* 최대 두 줄로 제한 */
+            line-height: 1.2; /* 줄 높이 설정 */
+            max-width: calc(50ch + 1em); /* 30자 너비 + 여백 설정 */
+            width: calc(50ch + 1em); /* 30자 너비 + 여백 설정 */
+            word-wrap: break-word; /* 단어가 길 경우 줄 바꿈 */
+        }
+
+        .word_title {
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 넘치는 내용에 대해 생략 부호(...) 표시 */
+            white-space: nowrap; /* 줄 바꿈 방지 */
+            width: 30ch; /* 10자 너비 */
+            max-width: 30ch; /* 최대 너비 10자로 제한 */
+            display: inline-block; /* inline-block으로 변경 */
+        }
+
+        .word_title_main {
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 넘치는 내용에 대해 생략 부호(...) 표시 */
+            white-space: nowrap; /* 줄 바꿈 방지 */
+            width: 50ch; /* 10자 너비 */
+            max-width: 50ch; /* 최대 너비 10자로 제한 */
+            display: inline-block; /* inline-block으로 변경 */
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{navbar :: navbarFragment}"></div>
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+<div>
+    <th:block layout:fragment="content"></th:block>
+</div>
+
+<a th:href="@{https://github.com/PNU-2024-07-TEAM2}" style="display: flex; justify-content: center;" target="_blank">
+    <img th:src="@{/images/my_ad.gif}" alt="My advertisement" width="35%">
+</a>
+
+<div style="height: 45px"></div>
+
+<div>
+    <ul class="fixed-bottom container-fluid flex bg-gray-200">
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/board/list">
+                <i class="fa-solid fa-bars"></i>
+                <span class="text-xs">Board</span>
+            </a>
+        </li>
+
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/home/main">
+                <i class="fa-solid fa-house"></i>
+                <span class="text-xs">Home</span>
+            </a>
+        </li>
+
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/board/mypage">
+                <i class="fa-solid fa-user"></i>
+                <span class="text-xs">My</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- 기본 템플릿 안에 삽입될 내용 End -->
+
+<!-- Bootstrap JS -->
+<script th:src="@{/bootstrap.min.js}"></script>
+<!-- 자바스크립트 Start -->
+<th:block layout:fragment="script"></th:block>
+<!-- 자바스크립트 End -->
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+
+
+</body>
+</html>

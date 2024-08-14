@@ -1,0 +1,72 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <!--폰트어썸 아이콘-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+    <!--데이지 UI-->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <!--테일윈드-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="import" href="question_list.html">
+
+    <main class="flex flex-grow flex-col items-center justify-center w-full">
+        <script>
+        </script>
+
+        <div class="w-full max-w-md mt-20">
+            <div class="flex items-center">
+                <button class="items-center">
+                    <i class="fa-solid fa-circle-user fa-7x"></i>
+                </button>
+                <div class="pl-10 items-center">
+
+                    <span class="text-xl font-bold" th:text="${current_user.username}"></span>
+                    <p class="text" th:text="${current_user.email}"></p>
+
+                    <button class="btn mt-2 text-xs font-semibold flex items-center" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/user/change/password}">비밀번호 변경</a>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-md mt-8">
+            <div class="flex items-center justify-between p-2 border-b">
+                <span class="font-semibold">내가 쓴 글</span>
+                <a th:href="@{/board/list(kw=${current_user.username}, page=0)}"
+                   class="font-semibold flex items-center">
+                    더보기
+                    <i class="fa-solid fa-angle-right"></i>
+                </a>
+
+
+            </div>
+            <div class="w-full border-collapse" th:each="board, loop : ${my_question}">
+                <table class="table" >
+                    <tbody>
+                    <!-- todo: 내가 쓴 글 5개 띄우기 -->
+                    <tr th:onclick="|location.href='@{|/board/detail/${board.id}|}'|">
+                        <td class="w-1/2 word_title" th:utext="${board.subject}"></td>
+
+                        <td class="w-1/4">
+                                <i class="fa-regular fa-heart"></i>
+                                <span th:text="${#lists.size(board.voter)}"></span>
+                        </td>
+
+                        <td class="w-1/4">
+                                <i class="fa-regular fa-comment"></i>
+                                <span th:text="|${#lists.size(board.answerList)}|"></span>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </main>
+</div>
+</html>
+
+
